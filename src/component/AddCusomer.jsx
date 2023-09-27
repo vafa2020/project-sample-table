@@ -14,7 +14,6 @@ const options = [
   { value: "پیک", label: "پیک" },
 ];
 export const AddCusomer = ({ customer, edit, close, setIdSelect }) => {
-  console.log(customer);
   const dispatch = useDispatch();
   const [date, setDate] = useState(
     customer?.id ? { persian: customer.date } : { format: "MM/DD/YYYY" }

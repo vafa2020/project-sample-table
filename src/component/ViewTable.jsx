@@ -81,24 +81,24 @@ export const ViewTable = () => {
         </Backdrop>
       )}
       <table className="table">
-        <thead className="border-b text-xl dark:border-neutral-500 bg-gray-400 text-white font-bold">
+        <thead className="border-b text-xl dark:border-neutral-500 bg-gray-600 text-white font-bold">
           <tr>
-            <th scope="col" className="px-6 py-4">
+            <th scope="col" className="px-6 py-4 font-bold">
               شماره فاکتور
             </th>
-            <th scope="col" className="px-6 py-4">
+            <th scope="col" className="px-6 py-4 font-bold">
               تاریخ فاکتور
             </th>
-            <th scope="col" className="px-6 py-4">
+            <th scope="col" className="px-6 py-4 font-bold">
               نام مشتری
             </th>
-            <th scope="col" className="px-6 py-4">
+            <th scope="col" className="px-6 py-4 font-bold">
               مبلغ فاکتور
             </th>
-            <th scope="col" className="px-6 py-4">
+            <th scope="col" className="px-6 py-4 font-bold">
               نوع فاکتور
             </th>
-            <th scope="col" className="px-6 py-4">
+            <th scope="col" className="px-6 py-4 font-bold">
               نحوه ارسال
             </th>
           </tr>
@@ -128,14 +128,18 @@ function TableRow(props) {
       }`}
       onClick={onClick}
     >
-      <td className="whitespace-nowrap px-6 py-4">{table.number}</td>
-      <td className="whitespace-nowrap px-6 py-4">{table.date}</td>
-      <td className="whitespace-nowrap px-6 py-4">{table.customer}</td>
-      <td className="whitespace-nowrap px-6 py-4">
+      <td className="whitespace-nowrap px-6 py-4 font-bold">{table.number}</td>
+      <td className="whitespace-nowrap px-6 py-4 font-bold">{table.date}</td>
+      <td className="whitespace-nowrap px-6 py-4 font-bold">
+        {table.customer}
+      </td>
+      <td className="whitespace-nowrap px-6 py-4 font-bold">
         {commaMoney(table.amount)}
       </td>
-      <td className="whitespace-nowrap px-6 py-4">{table.type}</td>
-      <td className="whitespace-nowrap px-6 py-4">{table.typeSend}</td>
+      <td className="whitespace-nowrap px-6 py-4 font-bold">{table.type}</td>
+      <td className="whitespace-nowrap px-6 py-4 font-bold">
+        {table.typeSend}
+      </td>
     </tr>
   );
 }
