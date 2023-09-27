@@ -13,6 +13,7 @@ import { AiFillFileAdd } from "react-icons/ai";
 import { AddCusomer } from "./AddCusomer";
 import { Backdrop } from "./Backdrop";
 import { commaMoney } from "../utility/currencyFormat";
+import toast from "react-hot-toast";
 
 export const ViewTable = () => {
   const dispatch = useDispatch();
@@ -38,10 +39,21 @@ export const ViewTable = () => {
     return <p>error</p>;
   }
   const deleteHandler = (id) => {
-    const isDelete = confirm("Are You Sure?");
-    if (isDelete) {
-      dispatch(deleteCustomer(id));
-      setIdSelect(0);
+    if (id > 0) {
+      const isDelete = confirm("Are You Sure?");
+      if (isDelete) {
+        dispatch(deleteCustomer(id));
+        setIdSelect(0);
+      }
+    } else {
+      toast.error("ردیفی انتخاب نشده است.");
+    }
+  };
+  const editHandler = (id) => {
+    if (id > 0) {
+      setEditCustomer(true);
+    } else {
+      toast.error("ردیفی انتخاب نشده است.");
     }
   };
   return (
@@ -49,7 +61,7 @@ export const ViewTable = () => {
       <Actions
         onRemove={() => deleteHandler(idSelect)}
         onAdd={() => setAddCustomer((prev) => !prev)}
-        onEdit={() => setEditCustomer((prev) => !prev)}
+        onEdit={() => editHandler(idSelect)}
         id={idSelect}
       />
       {addCustomer && (
