@@ -12,13 +12,13 @@ import { BiEditAlt } from "react-icons/bi";
 import { AiFillFileAdd } from "react-icons/ai";
 import { AddCusomer } from "./AddCusomer";
 import { Backdrop } from "./Backdrop";
+import { commaMoney } from "../utility/currencyFormat";
 
 export const ViewTable = () => {
   const dispatch = useDispatch();
   const { data, loading, error, customer } = useSelector(
     (state) => state.Table
   );
-  console.log(data);
   const [idSelect, setIdSelect] = useState(0);
   const [addCustomer, setAddCustomer] = useState(false);
   const [editCustomer, setEditCustomer] = useState(false);
@@ -41,28 +41,15 @@ export const ViewTable = () => {
     const isDelete = confirm("Are You Sure?");
     if (isDelete) {
       dispatch(deleteCustomer(id));
-      setIdSelect(0)
     }
   };
   return (
     <div className="overflow-x-auto p-20">
-      <div className="flex items-center justify-between m-5 w-44">
-        <span>
-          <BsTrashFill size="25" onClick={() => deleteHandler(idSelect)} />
-        </span>
-        <span>
-          <BiEditAlt
-            size="25"
-            onClick={() => setEditCustomer((prev) => !prev)}
-          />
-        </span>
-        <span>
-          <AiFillFileAdd
-            size="25"
-            onClick={() => setAddCustomer((prev) => !prev)}
-          />
-        </span>
-      </div>
+      <Actions
+        onRemove={() => deleteHandler(idSelect)}
+        onAdd={() => setAddCustomer((prev) => !prev)}
+        onEdit={() => setEditCustomer((prev) => !prev)}
+      />
       {addCustomer && (
         <Backdrop>
           <AddCusomer close={setAddCustomer} />
@@ -78,18 +65,30 @@ export const ViewTable = () => {
           />
         </Backdrop>
       )}
-      <table className="table table-zebra ">
-        <thead>
+      <table className="table">
+        <thead className="border-b text-xl dark:border-neutral-500 bg-gray-400 text-white font-bold">
           <tr>
-            <th>شماره فاکتور</th>
-            <th>تاریخ فاکتور</th>
-            <th> نام مشتری</th>
-            <th>مبلغ فاکتور</th>
-            <th>نوع فاکتور</th>
-            <th>نحوه ارسال</th>
+            <th scope="col" className="px-6 py-4">
+              شماره فاکتور
+            </th>
+            <th scope="col" className="px-6 py-4">
+              تاریخ فاکتور
+            </th>
+            <th scope="col" className="px-6 py-4">
+              نام مشتری
+            </th>
+            <th scope="col" className="px-6 py-4">
+              مبلغ فاکتور
+            </th>
+            <th scope="col" className="px-6 py-4">
+              نوع فاکتور
+            </th>
+            <th scope="col" className="px-6 py-4">
+              نحوه ارسال
+            </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="text-sm">
           {data?.map((table) => (
             <TableRow
               key={table.id}
@@ -107,17 +106,36 @@ export const ViewTable = () => {
 function TableRow(props) {
   // eslint-disable-next-line react/prop-types
   const { table, onClick, id } = props;
+  console.log(table);
   return (
     <tr
-      className={`cursor-pointer ${table.id == id ? "bg-gray-300" : ""}`}
+      className={`cursor-pointer border-b transition duration-300 ease-in-out hover:bg-neutral-50 dark:border-neutral-500 dark:hover:bg-neutral-300 ${
+        table.id == id ? "bg-gray-100" : ""
+      }`}
       onClick={onClick}
     >
-      <td>{table.number}</td>
-      <td>{table.date}</td>
-      <td>{table.customer}</td>
-      <td>{table.amount}</td>
-      <td>{table.type}</td>
-      <td>{table.typeSend}</td>
+      <td className="whitespace-nowrap px-6 py-4">{table.number}</td>
+      <td className="whitespace-nowrap px-6 py-4">{table.date}</td>
+      <td className="whitespace-nowrap px-6 py-4">{table.customer}</td>
+      <td className="whitespace-nowrap px-6 py-4">{commaMoney(table.amount)}</td>
+      <td className="whitespace-nowrap px-6 py-4">{table.type}</td>
+      <td className="whitespace-nowrap px-6 py-4">{table.typeSend}</td>
     </tr>
+  );
+}
+
+function Actions({ onRemove, onEdit, onAdd }) {
+  return (
+    <div className="flex items-center justify-between m-5 w-44">
+      <span>
+        <BsTrashFill size="25" onClick={onRemove} />
+      </span>
+      <span>
+        <BiEditAlt size="25" onClick={onEdit} />
+      </span>
+      <span>
+        <AiFillFileAdd size="25" onClick={onAdd} />
+      </span>
+    </div>
   );
 }

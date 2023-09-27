@@ -11,9 +11,9 @@ export const AddCusomer = ({ customer, edit, close }) => {
   const [date, setDate] = useState(
     customer?.id ? { persian: customer.date } : { format: "MM/DD/YYYY" }
   );
-  const [selectValue, setSelectValue] = useState(
-    customer?.id ? customer.typeSend : ""
-  );
+  const [selectValue, setSelectValue] = useState({
+    value: customer?.id ? customer.typeSend : "",
+  });
   const [inputValues, setInputValues] = useState({
     number: customer?.id ? customer.number : "",
     customer: customer?.id ? customer.customer : "",
@@ -42,7 +42,7 @@ export const AddCusomer = ({ customer, edit, close }) => {
       dispatch(
         addCustomer({
           ...inputValues,
-          typeSend: selectValue,
+          typeSend: selectValue.value,
           date: date.persian,
         })
       );
@@ -52,12 +52,15 @@ export const AddCusomer = ({ customer, edit, close }) => {
     dispatch(
       editCustomer({
         ...inputValues,
-        typeSend: selectValue,
+        typeSend: selectValue.value,
         date: date.persian,
         id: customer.id,
       })
     );
     close(false);
+  };
+  const handelSelect = (e) => {
+    setSelectValue({ value: e.target.value });
   };
   return (
     <>
@@ -152,11 +155,13 @@ export const AddCusomer = ({ customer, edit, close }) => {
             <select
               name="typeSend"
               id="typeSend"
-              onChange={(e) => setSelectValue(e.target.value)}
-              defaultValue={selectValue}
-              value={selectValue}
+              value={selectValue.value}
               className="select w-full py-5 px-3"
+              onChange={handelSelect}
             >
+              <option className="" value="انتخاب">
+                انتخاب
+              </option>
               <option className="" value="نقدی">
                 نقدی
               </option>
