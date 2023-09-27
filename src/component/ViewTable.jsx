@@ -41,6 +41,7 @@ export const ViewTable = () => {
     const isDelete = confirm("Are You Sure?");
     if (isDelete) {
       dispatch(deleteCustomer(id));
+      setIdSelect(0);
     }
   };
   return (
@@ -49,6 +50,7 @@ export const ViewTable = () => {
         onRemove={() => deleteHandler(idSelect)}
         onAdd={() => setAddCustomer((prev) => !prev)}
         onEdit={() => setEditCustomer((prev) => !prev)}
+        id={idSelect}
       />
       {addCustomer && (
         <Backdrop>
@@ -62,6 +64,7 @@ export const ViewTable = () => {
             edit={editCustomer}
             customer={customer}
             close={setEditCustomer}
+            setIdSelect={setIdSelect}
           />
         </Backdrop>
       )}
@@ -109,7 +112,7 @@ function TableRow(props) {
   return (
     <tr
       className={`cursor-pointer border-b transition duration-300 ease-in-out hover:bg-neutral-50 dark:border-neutral-500 dark:hover:bg-neutral-300 ${
-        table.id == id ? "bg-gray-100" : ""
+        table.id == id ? "bg-gray-200" : ""
       }`}
       onClick={onClick}
     >
@@ -125,19 +128,23 @@ function TableRow(props) {
   );
 }
 
-function Actions({ onRemove, onEdit, onAdd }) {
+function Actions({ onRemove, onEdit, onAdd, id }) {
   return (
     <div className="flex items-center justify-between m-5 w-44">
       <span>
         <BsTrashFill
-          className="cursor-pointer hover:text-red-500"
+          className={`cursor-pointer hover:text-red-500 ${
+            id > 0 ? "text-green-500" : ""
+          }`}
           size="30"
           onClick={onRemove}
         />
       </span>
       <span>
         <BiEditAlt
-          className="cursor-pointer hover:text-red-500"
+          className={`cursor-pointer hover:text-red-500 ${
+            id > 0 ? "text-green-500" : ""
+          }`}
           size="30"
           onClick={onEdit}
         />

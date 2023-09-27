@@ -13,7 +13,7 @@ const options = [
   { value: "نقدی", label: "نقدی" },
   { value: "پیک", label: "پیک" },
 ];
-export const AddCusomer = ({ customer, edit, close }) => {
+export const AddCusomer = ({ customer, edit, close, setIdSelect }) => {
   console.log(customer);
   const dispatch = useDispatch();
   const [date, setDate] = useState(
@@ -28,15 +28,12 @@ export const AddCusomer = ({ customer, edit, close }) => {
     amount: customer?.id ? customer.amount : "",
     type: customer?.id ? customer.type : "",
   });
-
   const handleInputs = (e) => {
     const { name, value } = e.target;
     setInputValues({ ...inputValues, [name]: value });
   };
-
   const convert = (date, format = date.format) => {
     let object = { date, format };
-
     setDate({
       gregorian: new DateObject(object).format(),
       persian: new DateObject(object).convert(persian, persian_en).format(),
@@ -66,6 +63,7 @@ export const AddCusomer = ({ customer, edit, close }) => {
       })
     );
     close(false);
+    setIdSelect(0);
   };
 
   return (
