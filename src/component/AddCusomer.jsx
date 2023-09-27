@@ -6,14 +6,22 @@ import DatePicker, { DateObject } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import persian_en from "react-date-object/locales/persian_en";
+import Select from "react-select";
+
+const options = [
+  { value: "انتخاب", label: "انتخاب" },
+  { value: "نقدی", label: "نقدی" },
+  { value: "پیک", label: "پیک" },
+];
 export const AddCusomer = ({ customer, edit, close }) => {
+  console.log(customer);
   const dispatch = useDispatch();
   const [date, setDate] = useState(
     customer?.id ? { persian: customer.date } : { format: "MM/DD/YYYY" }
   );
-  const [selectValue, setSelectValue] = useState({
-    value: customer?.id ? customer.typeSend : "",
-  });
+  const [selectValue, setSelectValue] = useState(
+    customer?.id && edit ? customer.typeSend : ""
+  );
   const [inputValues, setInputValues] = useState({
     number: customer?.id ? customer.number : "",
     customer: customer?.id ? customer.customer : "",
@@ -59,133 +67,101 @@ export const AddCusomer = ({ customer, edit, close }) => {
     );
     close(false);
   };
-  const handelSelect = (e) => {
-    setSelectValue({ value: e.target.value });
-  };
+
   return (
-    <>
-      <form onSubmit={submitHandler} className="">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label
-              htmlFor="number"
-              className="block text-gray-700 font-bold mb-2 text-lg"
-            >
-              شماره فاکتور
-            </label>
-            <input
-              type="text"
-              value={inputValues.number}
-              name="number"
-              id="number"
-              onChange={handleInputs}
-              className="shadow appearance-none border rounded w-full py-5 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="date"
-              className="block text-gray-700 text-lg font-bold mb-2"
-            >
-              تاریخ فاکتور
-            </label>
-            <DatePicker
-              calendar={persian}
-              locale={persian_fa}
-              value={date.persian}
-              onChange={convert}
-              calendarPosition="bottom-right"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="customer"
-              className="block text-gray-700 text-lg font-bold mb-2"
-            >
-              نام مشتری
-            </label>
-            <input
-              type="text"
-              name="customer"
-              value={inputValues.customer}
-              id="customer"
-              onChange={handleInputs}
-              className="shadow appearance-none bord rounded w-full py-5 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="amount"
-              className="block text-gray-700 text-lg font-bold mb-2"
-            >
-              مبلغ فاکتور
-            </label>
-            <input
-              type="number"
-              name="amount"
-              value={inputValues.amount}
-              id="amount"
-              onChange={handleInputs}
-              className="shadow appearance-none border rounded w-full py-5 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="type"
-              className="block text-gray-700 text-lg font-bold mb-2"
-            >
-              نوع فاکتور
-            </label>
-            <input
-              type="text"
-              name="type"
-              value={inputValues.type}
-              id="type"
-              onChange={handleInputs}
-              className="shadow appearance-none border rounded w-full py-5 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="typeSend"
-              className="block text-gray-700 text-lg font-bold mb-2"
-            >
-              نحوه ارسال
-            </label>
-            <select
-              name="typeSend"
-              id="typeSend"
-              value={selectValue.value}
-              className="select w-full py-5 px-3"
-              onChange={handelSelect}
-            >
-              <option className="" value="انتخاب">
-                انتخاب
-              </option>
-              <option className="" value="نقدی">
-                نقدی
-              </option>
-              <option className="" value="پیک">
-                پیک
-              </option>
-            </select>
-          </div>
-        </div>
-        <div className="flex items-center justify-around">
-          <button
-            type="submit"
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-10 rounded cursor-pointer"
-          >
-            {customer?.id ? "Edit" : "Add"}
-          </button>
-          <button
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-10 rounded cursor-pointer"
-            onClick={() => close(false)}
-          >
-            Cancele
-          </button>
-        </div>
-      </form>
-    </>
+    <form onSubmit={submitHandler} className="">
+      <div className="grid grid-cols-2 gap-4">
+        <InputComponent
+          name="number"
+          value={inputValues.number}
+          label="شماره فاکتور"
+          handleInputs={handleInputs}
+        />
+        <InputComponent name="date" label="تاریخ فاکتور">
+          <DatePicker
+            calendar={persian}
+            locale={persian_fa}
+            value={date.persian}
+            onChange={convert}
+            calendarPosition="bottom-right"
+          />
+        </InputComponent>
+        <InputComponent
+          name="customer"
+          value={inputValues.customer}
+          label="نام مشتری"
+          handleInputs={handleInputs}
+        />
+        <InputComponent
+          name="amount"
+          value={inputValues.amount}
+          label="مبلغ فاکتور"
+          handleInputs={handleInputs}
+          type="number"
+        />
+        <InputComponent
+          name="type"
+          value={inputValues.type}
+          label="نوع فاکتور"
+          handleInputs={handleInputs}
+          type="text"
+        />
+        <InputComponent name="typeSend" label="نحوه ارسال">
+          <Select
+            defaultValue={selectValue}
+            onChange={setSelectValue}
+            options={options}
+            id="typeSend"
+            name="typeSend"
+          />
+        </InputComponent>
+      </div>
+      <div className="flex items-center justify-around">
+        <button
+          type="submit"
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-10 rounded cursor-pointer"
+        >
+          {customer?.id ? "Edit" : "Add"}
+        </button>
+        <button
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-10 rounded cursor-pointer"
+          onClick={() => close(false)}
+        >
+          Cancele
+        </button>
+      </div>
+    </form>
   );
 };
+
+function InputComponent({
+  type = "text",
+  label,
+  name,
+  handleInputs,
+  value,
+  children,
+}) {
+  return (
+    <div>
+      <label
+        htmlFor={name}
+        className="block text-gray-700 font-bold mb-2 text-lg"
+      >
+        {label}
+      </label>
+      {children ? (
+        children
+      ) : (
+        <input
+          type={type}
+          value={value}
+          name={name}
+          id={name}
+          onChange={handleInputs}
+          className="shadow appearance-none border rounded w-full py-5 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      )}
+    </div>
+  );
+}

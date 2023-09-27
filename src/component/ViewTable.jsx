@@ -106,7 +106,6 @@ export const ViewTable = () => {
 function TableRow(props) {
   // eslint-disable-next-line react/prop-types
   const { table, onClick, id } = props;
-  console.log(table);
   return (
     <tr
       className={`cursor-pointer border-b transition duration-300 ease-in-out hover:bg-neutral-50 dark:border-neutral-500 dark:hover:bg-neutral-300 ${
@@ -117,7 +116,9 @@ function TableRow(props) {
       <td className="whitespace-nowrap px-6 py-4">{table.number}</td>
       <td className="whitespace-nowrap px-6 py-4">{table.date}</td>
       <td className="whitespace-nowrap px-6 py-4">{table.customer}</td>
-      <td className="whitespace-nowrap px-6 py-4">{commaMoney(table.amount)}</td>
+      <td className="whitespace-nowrap px-6 py-4">
+        {commaMoney(table.amount)}
+      </td>
       <td className="whitespace-nowrap px-6 py-4">{table.type}</td>
       <td className="whitespace-nowrap px-6 py-4">{table.typeSend}</td>
     </tr>
@@ -128,13 +129,25 @@ function Actions({ onRemove, onEdit, onAdd }) {
   return (
     <div className="flex items-center justify-between m-5 w-44">
       <span>
-        <BsTrashFill size="25" onClick={onRemove} />
+        <BsTrashFill
+          className="cursor-pointer hover:text-red-500"
+          size="30"
+          onClick={onRemove}
+        />
       </span>
       <span>
-        <BiEditAlt size="25" onClick={onEdit} />
+        <BiEditAlt
+          className="cursor-pointer hover:text-red-500"
+          size="30"
+          onClick={onEdit}
+        />
       </span>
       <span>
-        <AiFillFileAdd size="25" onClick={onAdd} />
+        <AiFillFileAdd
+          className="cursor-pointer hover:text-red-500"
+          size="30"
+          onClick={onAdd}
+        />
       </span>
     </div>
   );
